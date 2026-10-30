@@ -11,9 +11,19 @@ const vegMark = (veg) => `<span class="vegmark ${veg ? 'v' : 'nv'}" title="${veg
 const statusBadge = (s) => `<span class="status s-${s}">${s.replaceAll('_', ' ')}</span>`;
 const RESTAURANT_EMOJI = { 'Biryani Bazaar': '🍛', 'Pizza Planet': '🍕', 'Punjabi Tadka': '🫓', 'Dosa Junction': '🥞', 'Wok This Way': '🍜', 'Burger Barn': '🍔', 'Chaat Corner': '🥙', 'Sweet Tooth': '🧁' };
 
+// Sign-ins are kept per tab in the online demo, so one tab can be the customer and another the admin.
+const AUTH_STORE = window.TT_MOCK ? sessionStorage : localStorage;
+
 // ---------- API ----------
 async function api(path, { method = 'GET', body } = {}) {
-  const token = localStorage.getItem('tt_token');
+  const token = AUTH_STORE.getItem('tt_token');
+  if (window.TT_MOCK) { // online demo build: same API, answered inside the browser
+    const r = window.TT_MOCK.handle(method, path, body, token);
+    await new Promise((ok) => setTimeout(ok, 60));
+    if (r.status === 401 && token && path !== '/auth/login') Auth.logout(false);
+    if (r.status >= 400) throw new Error(r.data.error || `Request failed (${r.status})`);
+    return r.data;
+  }
   const res = await fetch('/api' + path, {
     method,
     headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
@@ -27,9 +37,9 @@ async function api(path, { method = 'GET', body } = {}) {
 
 // ---------- session ----------
 const Auth = {
-  user() { return JSON.parse(localStorage.getItem('tt_user') || 'null'); },
-  save({ token, user }) { localStorage.setItem('tt_token', token); localStorage.setItem('tt_user', JSON.stringify(user)); },
-  logout(redirect = true) { localStorage.removeItem('tt_token'); localStorage.removeItem('tt_user'); if (redirect) location.href = 'login.html'; },
+  user() { return JSON.parse(AUTH_STORE.getItem('tt_user') || 'null'); },
+  save({ token, user }) { AUTH_STORE.setItem('tt_token', token); AUTH_STORE.setItem('tt_user', JSON.stringify(user)); },
+  logout(redirect = true) { AUTH_STORE.removeItem('tt_token'); AUTH_STORE.removeItem('tt_user'); if (redirect) location.href = 'login.html'; },
   /** Redirects away if the visitor is not signed in or has the wrong role. */
   require(role) {
     const u = Auth.user();
@@ -124,7 +134,7 @@ document.addEventListener('DOMContentLoaded', renderHeader);
 // ---------- installable app (PWA) ----------
 let installPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installPrompt = e; });
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 
 function loadScript(src) {
@@ -133,7 +143,7 @@ function loadScript(src) {
 
 /** Popup with a QR code of this site (scan it with a phone camera) and an install button. */
 async function showAppModal() {
-  const url = location.origin + '/';
+  const url = new URL('./', location.href).href;
   const m = document.createElement('div');
   m.className = 'modal';
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
