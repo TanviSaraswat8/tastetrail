@@ -1,8 +1,8 @@
 // TasteTrail service worker: makes the site installable as an app and keeps the pages
 // available when the network is slow. API calls (/api/...) are never cached.
-const CACHE = 'tastetrail-v2';
+const CACHE = 'tastetrail-v3';
 const SHELL = ['./', './index.html', './login.html', './restaurant.html', './cart.html', './orders.html', './track.html',
-  './admin.html', './admin-menu.html', './admin-analytics.html', './css/style.css', './js/app.js', './js/dish-images.js', './credits.html', './js/home.js', './js/login.js',
+  './admin.html', './admin-menu.html', './admin-analytics.html', './css/style.css', './js/app.js', './js/dish-images.js', './credits.html', './explore.html', './passport.html', './js/explore.js', './js/passport.js', './js/home.js', './js/login.js',
   './js/restaurant.js', './js/cart.js', './js/orders.js', './js/track.js', './js/admin-orders.js', './js/admin-menu.js',
   './js/admin-analytics.js', './vendor/chart.umd.min.js', './vendor/qrcode.js', './icons/icon-192.png', './icons/icon-512.png', './manifest.webmanifest'];
 

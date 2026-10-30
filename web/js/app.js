@@ -9,7 +9,8 @@ const when = (iso) => new Date(iso).toLocaleString('en-IN', { day: 'numeric', mo
 const qs = (key) => new URLSearchParams(location.search).get(key);
 const vegMark = (veg) => `<span class="vegmark ${veg ? 'v' : 'nv'}" title="${veg ? 'Veg' : 'Non-veg'}"><i></i></span>`;
 const statusBadge = (s) => `<span class="status s-${s}">${s.replaceAll('_', ' ')}</span>`;
-const RESTAURANT_EMOJI = { 'Biryani Bazaar': '🍛', 'Pizza Planet': '🍕', 'Punjabi Tadka': '🫓', 'Dosa Junction': '🥞', 'Wok This Way': '🍜', 'Burger Barn': '🍔', 'Chaat Corner': '🥙', 'Sweet Tooth': '🧁' };
+const RESTAURANT_EMOJI = { 'Biryani Bazaar': '🍛', 'Pizza Planet': '🍕', 'Punjabi Tadka': '🫓', 'Dosa Junction': '🥞', 'Wok This Way': '🍜', 'Burger Barn': '🍔', 'Chaat Corner': '🥙', 'Sweet Tooth': '🧁',
+  'Roll Republic': '🌯', 'Green Bowl Co.': '🥗', 'Kebab Kingdom': '🍢', 'Tokyo Tiffin': '🍣', 'Taco Tierra': '🌮', 'Thali House': '🍱' };
 
 // Sign-ins are kept per tab in the online demo, so one tab can be the customer and another the admin.
 const AUTH_STORE = window.TT_MOCK ? sessionStorage : localStorage;
@@ -70,6 +71,33 @@ const Cart = {
   },
 };
 
+/** Puts a whole planned meal in the cart (asks first if the cart already has other food). */
+Cart.replaceWith = (restaurant, items, then) => {
+  const apply = () => {
+    Cart.set({ restaurant: { id: restaurant.id, name: restaurant.name, area: restaurant.area, theme: restaurant.theme },
+      items: items.map((i) => ({ id: i.id, name: i.name, price: i.price, is_veg: i.is_veg, emoji: i.emoji, quantity: i.quantity || 1 })) });
+    if (then) then();
+  };
+  const c = Cart.get();
+  if (!c.items.length) return apply();
+  const m = document.createElement('div');
+  m.className = 'modal';
+  m.innerHTML = `<div class="card"><h3>Replace your cart?</h3>
+    <p class="small muted" style="margin-top:8px">Your cart has items from <b>${esc(c.restaurant.name)}</b>. Replace them with this meal from <b>${esc(restaurant.name)}</b>?</p>
+    <div class="row" style="justify-content:flex-end;margin-top:18px"><button class="btn btn-ghost" data-no>Keep my cart</button><button class="btn btn-primary" data-yes>Replace</button></div></div>`;
+  document.body.append(m);
+  m.querySelector('[data-no]').onclick = () => m.remove();
+  m.querySelector('[data-yes]').onclick = () => { m.remove(); apply(); };
+};
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.append(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2600);
+}
+
 function confirmReplace(item, restaurant) {
   const m = document.createElement('div');
   m.className = 'modal';
@@ -112,7 +140,7 @@ function renderHeader() {
   const count = Cart.count();
   const tabs = u?.role === 'admin'
     ? [['admin.html', '📋', 'Live orders'], ['admin-menu.html', '📖', 'Menu'], ['admin-analytics.html', '📊', 'Analytics']]
-    : [['index.html', '🏠', 'Restaurants'], ...(u ? [['orders.html', '🧾', 'My orders']] : []), ['cart.html', '🛍️', 'Cart']];
+    : [['index.html', '🏠', 'Restaurants'], ['explore.html', '✨', 'Explore'], ...(u ? [['passport.html', '🎖️', 'Passport'], ['orders.html', '🧾', 'Orders']] : []), ['cart.html', '🛍️', 'Cart']];
   const badge = (href) => (href === 'cart.html' && count ? `<span class="count">${count}</span>` : '');
   el.innerHTML = `<div class="inner">
       <a class="logo" href="${u?.role === 'admin' ? 'admin.html' : 'index.html'}"><span class="mark">🍴</span>Taste<span style="margin-left:-8px">Trail</span></a>

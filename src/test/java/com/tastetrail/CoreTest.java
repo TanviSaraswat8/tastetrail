@@ -8,6 +8,7 @@ import com.tastetrail.payment.PaymentMethod;
 import com.tastetrail.security.PasswordHasher;
 import com.tastetrail.security.TokenService;
 import com.tastetrail.service.*;
+import com.tastetrail.explore.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -226,6 +227,65 @@ public final class CoreTest {
             Cart c = cart(1, 10, "A", 2, 100);
             throwsMsg(() -> c.getItems().clear(), "");
             eq(200.0, c.getSubtotal()); eq(2, c.getItemCount());
+        });
+
+
+        // ---------- TasteTrail-only features ----------
+        java.util.function.BiFunction<String, Object[], Dish> dish = (name, a) -> new Dish((Integer) a[0], name, (String) a[1], ((Number) a[2]).doubleValue(),
+            true, "x", 1, "R", "North Indian", 2.0, 15, (Integer) a[3]);
+        List<Dish> menu = List.of(
+            dish.apply("Dal", new Object[]{1, "Mains", 200, 10}), dish.apply("Paneer", new Object[]{2, "Mains", 280, 20}),
+            dish.apply("Samosa", new Object[]{3, "Starters", 50, 5}), dish.apply("Lassi", new Object[]{4, "Beverages", 60, 1}));
+        FeastPlanner planner = new FeastPlanner(BillCalculator.STANDARD);
+
+        test("feast planner: final bill (with GST, packaging, delivery) stays within budget", () -> {
+            FeastPlanner.Plan p = planner.plan(menu, 2, 700, false).orElseThrow();
+            ok(p.total() <= 700, "total " + p.total());
+            eq(BillCalculator.STANDARD.totalFor(p.food(), 2.0), p.total());
+        });
+        test("feast planner: everybody gets at least one full serving", () -> {
+            FeastPlanner.Plan p = planner.plan(menu, 3, 900, false).orElseThrow();
+            ok(p.servingsHalf() >= 6, "servings " + p.servingsHalf());
+        });
+        test("feast planner: impossible budget gives no plan", () -> ok(planner.plan(menu, 4, 300, false).isEmpty(), "expected empty"));
+        test("feast planner: DP matches brute force on a small menu", () -> {
+            FeastPlanner.Plan p = planner.plan(menu, 2, 800, false).orElseThrow();
+            double best = -1; int maxO = 20;
+            for (int a = 0; a <= 2; a++) for (int b = 0; b <= 2; b++) for (int c = 0; c <= 2; c++) for (int d = 0; d <= 2; d++) {
+                double food = 200 * a + 280 * b + 50 * c + 60 * d;
+                if (2 * a + 2 * b + c < 4 || BillCalculator.STANDARD.totalFor(food, 2.0) > 800) continue;
+                double v = 0; int[] q = {a, b, c, d};
+                for (int k = 0; k < 4; k++) { double one = 0, val = new double[]{10, 10, 6, 4}[k] * (1 + 0.5 * new int[]{10, 20, 5, 1}[k] / maxO);
+                    for (int r = 0; r < q[k]; r++) { one += val; val *= 0.7; } v += one; }
+                best = Math.max(best, v);
+            }
+            eq(Math.round(best * 10) / 10.0, p.value());
+        });
+        test("bill split by items adds up exactly to the bill", () -> {
+            Cart c = cart(2, 15, "Biryani", 1, 379, "Chai", 1, 49, "Raita", 2, 59);
+            Bill bill = BillCalculator.STANDARD.calculate(c);
+            List<CartItem> lines = c.getItems();
+            Map<Integer, List<Integer>> who = Map.of(lines.get(0).getMenuItemId(), List.of(0), lines.get(1).getMenuItemId(), List.of(1));
+            List<BillSplitter.Share> shares = new BillSplitter().split(bill, lines, List.of("A", "B"), who);
+            eq(bill.getTotal(), BillCalculator.round2(shares.get(0).pay() + shares.get(1).pay()));
+            ok(shares.get(0).pay() > shares.get(1).pay(), "biryani eater pays more");
+        });
+        test("bill split equally: rounding never loses a paisa", () -> {
+            Cart c = cart(2, 15, "A", 1, 100);
+            Bill bill = BillCalculator.STANDARD.calculate(c);
+            List<BillSplitter.Share> s3 = new BillSplitter().split(bill, List.of("A", "B", "C"));
+            eq(bill.getTotal(), BillCalculator.round2(s3.stream().mapToDouble(BillSplitter.Share::pay).sum()));
+        });
+        test("mood match: mild mode never suggests spicy dishes first", () -> {
+            List<Dish> ds = List.of(dish.apply("Chilli Chicken", new Object[]{1, "Starters", 200, 50}), dish.apply("Dal Makhani", new Object[]{2, "Mains", 200, 10}));
+            List<MoodMatcher.Match> m = new MoodMatcher(d -> 30).match(ds, MoodMatcher.Mood.COMFORT, 0, 500, false, Set.of(), 5);
+            eq("Dal Makhani", m.get(0).dish().name());
+        });
+        test("taste passport: new cuisine gives bonus XP and a stamp", () -> {
+            var places = List.of(new TastePassport.Place(1, "R", "North Indian"), new TastePassport.Place(2, "S", "Mexican"));
+            var at = java.time.ZonedDateTime.of(2026, 10, 30, 21, 0, 0, 0, Analytics.IST);
+            var res = new TastePassport().build(places, List.of(new TastePassport.PastOrder(1, at, menu, true), new TastePassport.PastOrder(1, at, menu, false)));
+            eq(10 + 5 + 25 + 10, res.xp()); eq(1, res.stampsCollected()); eq("S", res.challenge().name());
         });
 
         System.out.printf("%n%d passed, %d failed%n", passed, failed);

@@ -21,6 +21,7 @@ async function init() {
   <div class="side side-wide">
     <div class="stack">
       <div class="card pad" id="items"></div>
+      <div class="card pad" id="split"></div>
       <div class="card pad" id="recs"></div>
       <div class="card pad">
         <h3>Delivery address</h3>
@@ -84,10 +85,13 @@ async function refresh() {
       ${row('Delivery fee', quote.deliveryFee ? inr(quote.deliveryFee) : 'FREE', quote.deliveryFee ? '' : 'green bold')}
       ${row('Packaging', inr(quote.packaging))}
       ${row('GST (5%)', inr(quote.tax))}
+      ${row('Platform fee', '₹0 · FREE', 'green bold')}
       <div class="row between" style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px;font-weight:800;font-size:16px"><span>To pay</span><span>${inr(quote.total)}</span></div>
     </div>
     ${quote.freeDeliveryGap > 0 ? `<p class="alert alert-warn xs" style="margin-top:12px">Add ${inr(quote.freeDeliveryGap)} more for free delivery</p>` : ''}
-    <p class="small" style="margin-top:12px;color:#57534e">🛵 Estimated delivery in <b>${quote.etaMinutes} min</b></p>` : '';
+    <p class="small" style="margin-top:12px;color:#57534e">🛵 Estimated delivery in <b>${quote.etaMinutes} min</b></p>
+    ${xray(quote)}` : '';
+  renderSplit();
   $('#place').disabled = !quote;
   $('#place').textContent = user ? `Place order · ${quote ? inr(quote.total) : ''}` : 'Sign in to place order';
 
@@ -103,6 +107,70 @@ async function refresh() {
         <div class="row between" style="margin-top:8px"><span class="small bold">${inr(x.price)}</span>${qtyButton(x.id)}</div>
       </div>`).join('')}</div>`;
 }
+
+/** "Where your money goes": every rupee of the bill, shown as one bar. */
+function xray(q) {
+  const food = q.subtotal - q.discount, parts = [['Food', food, '#f2622e'], ['GST', q.tax, '#0ea5e9'], ['Packaging', q.packaging, '#a855f7'], ['Delivery', q.deliveryFee, '#16a34a']].filter((p) => p[1] > 0);
+  return `<div style="margin-top:14px"><div class="xs bold">Where your money goes</div>
+    <div class="xray">${parts.map(([, v, c]) => `<i style="width:${(v / q.total) * 100}%;background:${c}"></i>`).join('')}</div>
+    <div class="row wrap xs muted" style="gap:10px;margin-top:6px">${parts.map(([l, v, c]) => `<span><span style="color:${c}">●</span> ${l} ${Math.round((v / q.total) * 100)}%</span>`).join('')}</div>
+    <div class="fair"><span>✅</span><span><b>No platform fee, no surge, no hidden charges.</b> Big delivery apps now add a platform fee of about ₹15–18 on every order; TasteTrail shows every rupee and charges none.</span></div></div>`;
+}
+
+// ---------- fair bill split ----------
+const split = { people: [user ? user.name.split(' ')[0] : 'Me', 'Friend 1'], mode: 'items', assign: {} };
+let splitTimer = null;
+function renderSplit() {
+  const c = Cart.get(), el = $('#split');
+  if (!el || !c.items.length) return;
+  const n = split.people.length;
+  el.innerHTML = `
+    <div class="row between wrap"><div><h3>👥 Split this bill</h3><p class="xs muted">Ordering together? Everyone pays for what they ate – taxes and fees shared fairly.</p></div>
+      <div class="seg"><button data-sm="items" class="${split.mode === 'items' ? 'on' : ''}">By dish</button><button data-sm="equal" class="${split.mode === 'equal' ? 'on' : ''}">Equally</button></div></div>
+    <div class="row wrap" style="gap:6px;margin-top:12px">${split.people.map((p, i) => `<span class="chip" style="display:inline-flex;gap:6px;align-items:center;padding:4px 6px 4px 12px">
+        <input value="${esc(p)}" data-pn="${i}" style="border:0;width:${Math.max(4, p.length + 1)}ch;font:inherit;outline:0;background:none">${n > 2 ? `<button class="linkbtn" data-prm="${i}" title="Remove">✕</button>` : ''}</span>`).join('')}
+      ${n < 10 ? '<button class="chip" data-padd>+ Add person</button>' : ''}</div>
+    ${split.mode === 'items' ? `<div class="split-box">${c.items.map((it) => {
+      const who = split.assign[it.id] || [];
+      return `<div class="row between" style="padding:6px 0;gap:10px"><span class="small" style="min-width:0"><b>${it.quantity} ×</b> ${esc(it.name)}</span>
+        <div class="who">${split.people.map((p, i) => `<button class="${who.includes(i) ? 'on' : ''}" data-who="${it.id}:${i}">${esc(p || '?')}</button>`).join('')}</div></div>`;
+    }).join('')}<p class="xs muted" style="margin-top:4px">Tap who shares each dish. A dish nobody is tapped on is shared by everyone.</p></div>` : ''}
+    <div id="shares" style="margin-top:10px"></div>`;
+  clearTimeout(splitTimer); splitTimer = setTimeout(loadShares, 150);
+}
+async function loadShares() {
+  const c = Cart.get();
+  try {
+    const r = await api('/cart/split', { method: 'POST', body: { restaurantId: c.restaurant.id, items: c.items.map(({ id, quantity }) => ({ id, quantity })),
+      coupon: quote?.couponApplied || undefined, people: split.people.map((p, i) => p.trim() || `Person ${i + 1}`), mode: split.mode, assign: split.assign } });
+    $('#shares').innerHTML = r.shares.map((s) => `<div class="share"><div style="min-width:0"><b>${esc(s.person)}</b>
+        <div class="xs muted" style="overflow-wrap:anywhere">${esc(s.items.join(', '))}${s.extras ? ` · +${inr(s.extras)} share of taxes & fees` : ''}</div></div><b style="font-size:16px">${inr(s.pay)}</b></div>`).join('')
+      + `<p class="xs muted" style="margin-top:6px">Adds up exactly to ${inr(r.total)}. Copy and send it to the group:</p><button class="btn btn-ghost" id="copysplit" style="margin-top:6px">📋 Copy split</button>`;
+    $('#copysplit').onclick = () => {
+      const txt = `TasteTrail order from ${c.restaurant.name}\n` + r.shares.map((s) => `${s.person}: ${inr(s.pay)}`).join('\n') + `\nTotal: ${inr(r.total)}`;
+      navigator.clipboard?.writeText(txt).then(() => toast('Split copied – paste it in your group chat'), () => toast('Could not copy'));
+    };
+  } catch (e) { showError($('#shares'), e.message); }
+}
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (t.closest('[data-sm]')) { split.mode = t.closest('[data-sm]').dataset.sm; renderSplit(); }
+  else if (t.closest('[data-padd]')) { split.people.push(`Friend ${split.people.length}`); renderSplit(); }
+  else if (t.closest('[data-prm]')) {
+    const k = Number(t.closest('[data-prm]').dataset.prm);
+    split.people.splice(k, 1);
+    for (const id in split.assign) split.assign[id] = split.assign[id].filter((p) => p !== k).map((p) => (p > k ? p - 1 : p));
+    renderSplit();
+  } else if (t.closest('[data-who]')) {
+    const [id, p] = t.closest('[data-who]').dataset.who.split(':').map(Number);
+    const w = new Set(split.assign[id] || []); w.has(p) ? w.delete(p) : w.add(p);
+    split.assign[id] = [...w]; renderSplit();
+  }
+});
+document.addEventListener('change', (e) => {
+  const i = e.target.dataset?.pn;
+  if (i !== undefined) { split.people[Number(i)] = e.target.value.slice(0, 20); renderSplit(); }
+});
 
 async function placeOrder() {
   if (!user) { location.href = 'login.html?next=cart.html'; return; }

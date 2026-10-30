@@ -133,6 +133,51 @@ public final class Seeder {
             it("Vanilla Scoop", "Desserts", 59, true, "🍦", 1, "Single scoop ice cream")),
             List.of(pr("Belgian Waffle", "Vanilla Scoop", 0.45), pr("Belgian Waffle", "Hot Chocolate", 0.3), pr("Red Velvet Pastry", "Hot Chocolate", 0.35))));
 
+    /** Brands onboarded recently: listed with menus but no order history yet (shown as "New"). */
+    static final List<Rest> NEW_BRANDS = List.of(
+        new Rest("Roll Republic", "Rolls · Wraps", "Sector 63", 2.2, 12, 350, false, "orange", List.of(
+            it("Chicken Kathi Roll", "Mains", 159, false, "🌯", 1, "Flaky paratha rolled with chicken tikka and onions"),
+            it("Paneer Tikka Roll", "Mains", 139, true, "🌯", 1, "Smoky paneer tikka with mint chutney"),
+            it("Egg Roll", "Mains", 99, false, "🥚", 1, "Kolkata-style egg paratha roll"),
+            it("Mutton Seekh Roll", "Mains", 189, false, "🌯", 1, "Minced mutton seekh kebab in a roomali wrap"),
+            it("Masala Fries", "Sides", 89, true, "🍟", 1, "Crispy fries with chaat masala"),
+            it("Nimbu Pani", "Beverages", 49, true, "🍋", 1, "Fresh lime soda, sweet or salted")), List.of()),
+        new Rest("Green Bowl Co.", "Healthy · Salads", "Sector 44", 3.4, 10, 500, true, "emerald", List.of(
+            it("Garden Power Salad", "Mains", 279, true, "🥗", 1, "Crunchy greens, cucumber, chickpeas and lemon-herb dressing"),
+            it("Greek Salad", "Mains", 229, true, "🥗", 1, "Cucumber, tomato, olives and feta"),
+            it("Falafel Hummus Bowl", "Mains", 259, true, "🧆", 1, "Falafel with hummus, pickles and pita"),
+            it("Avocado Toast", "Starters", 199, true, "🥑", 1, "Sourdough with smashed avocado and chilli flakes"),
+            it("Fresh Fruit Bowl", "Desserts", 149, true, "🍓", 1, "Seasonal cut fruits with honey"),
+            it("Green Detox Smoothie", "Beverages", 169, true, "🥤", 1, "Spinach, apple, banana and ginger")), List.of()),
+        new Rest("Kebab Kingdom", "Mughlai · Kebabs", "Sector 29", 3.9, 28, 700, false, "red", List.of(
+            it("Seekh Kebab (4 pcs)", "Starters", 299, false, "🍢", 1, "Charcoal-grilled minced mutton skewers"),
+            it("Galouti Kebab", "Starters", 329, false, "🥩", 1, "Melt-in-the-mouth Lucknowi kebab"),
+            it("Tandoori Chicken (Half)", "Mains", 349, false, "🍗", 1, "Clay-oven roasted chicken with spices"),
+            it("Paneer Tikka", "Starters", 259, true, "🧀", 1, "Char-grilled cottage cheese with peppers"),
+            it("Rumali Roti", "Breads", 39, true, "🫓", 1, "Thin handkerchief bread"),
+            it("Phirni", "Desserts", 99, true, "🍮", 1, "Chilled ground-rice pudding")), List.of()),
+        new Rest("Tokyo Tiffin", "Japanese · Korean", "Sector 18", 2.7, 20, 800, false, "rose", List.of(
+            it("Veg Sushi Platter", "Mains", 399, true, "🍣", 1, "Cucumber, avocado and carrot maki rolls"),
+            it("Chicken Ramen", "Mains", 349, false, "🍜", 1, "Rich broth, noodles, chicken and soft egg"),
+            it("Kimchi Fried Rice", "Mains", 279, true, "🍚", 1, "Spicy fermented cabbage fried rice"),
+            it("Korean Fried Chicken", "Starters", 329, false, "🍗", 1, "Double-fried chicken in gochujang glaze"),
+            it("Veg Gyoza (6 pcs)", "Starters", 219, true, "🥟", 1, "Pan-fried Japanese dumplings"),
+            it("Matcha Latte", "Beverages", 189, true, "🍵", 1, "Japanese green tea latte")), List.of()),
+        new Rest("Taco Tierra", "Mexican", "Sector 76", 4.5, 15, 600, false, "yellow", List.of(
+            it("Chicken Tacos (3 pcs)", "Mains", 269, false, "🌮", 1, "Soft tacos with grilled chicken and salsa"),
+            it("Bean Burrito", "Mains", 239, true, "🌯", 1, "Rice, beans, cheese and pico de gallo"),
+            it("Loaded Nachos", "Starters", 219, true, "🧀", 1, "Nachos with cheese sauce, beans and jalapeños"),
+            it("Cheese Quesadilla", "Mains", 229, true, "🫓", 1, "Grilled tortilla with melted cheese and peppers"),
+            it("Churros", "Desserts", 149, true, "🍩", 1, "Cinnamon-sugar churros with chocolate dip"),
+            it("Virgin Mojito", "Beverages", 129, true, "🍹", 1, "Mint, lime and soda")), List.of()),
+        new Rest("Thali House", "Gujarati · Rajasthani", "Sector 50", 3.2, 18, 450, true, "lime", List.of(
+            it("Gujarati Thali", "Mains", 299, true, "🍱", 1, "Dal, kadhi, two sabzis, rotli, rice and sweet"),
+            it("Dal Baati Churma", "Mains", 249, true, "🥘", 1, "Baked wheat balls with dal and sweet churma"),
+            it("Khaman Dhokla", "Starters", 99, true, "🟨", 1, "Steamed gram-flour cakes with green chutney"),
+            it("Pyaaz Kachori (2 pcs)", "Starters", 79, true, "🥟", 1, "Flaky onion-stuffed kachori"),
+            it("Khandvi", "Starters", 109, true, "🌀", 1, "Rolled gram-flour bites with mustard tadka"),
+            it("Aam Panna", "Beverages", 69, true, "🥭", 1, "Raw mango cooler with cumin")), List.of()));
+
     static final String[] FIRST = {"Aarav", "Vivaan", "Aditya", "Ishaan", "Kabir", "Riya", "Ananya", "Diya", "Saanvi", "Meera", "Rohan", "Arjun", "Kavya", "Pooja", "Neha", "Rahul", "Simran", "Karan", "Tanya", "Yash"};
     static final String[] LAST = {"Sharma", "Verma", "Gupta", "Singh", "Mehta", "Iyer", "Nair", "Kapoor", "Malhotra", "Bansal", "Chauhan", "Reddy"};
     static final String[] AREAS = {"Sector 125, Noida", "Sector 62, Noida", "Sector 18, Noida", "Sector 50, Noida", "Sector 137, Noida", "Sector 76, Noida", "Indirapuram, Ghaziabad"};
@@ -212,6 +257,19 @@ public final class Seeder {
         String[] live = {"PLACED", "PLACED", "CONFIRMED", "PREPARING", "PREPARING", "OUT_FOR_DELIVERY"};
         for (int k = 0; k < live.length; k++)
             placeOrder(users.get(1 + k * 3), RESTAURANTS.get(k % RESTAURANTS.size()), Instant.now().minus(Duration.ofMinutes(40 - k * 6L)), live[k]);
+        insertRestaurants(NEW_BRANDS); // added last so earlier ids and the order history stay unchanged
+    }
+
+    static void insertRestaurants(List<Rest> list) {
+        for (Rest r : list) {
+            r.id = insert("INSERT INTO restaurants (name, cuisine, area, distance_km, prep_minutes, cost_for_two, is_pure_veg, theme) VALUES (?,?,?,?,?,?,?,?)",
+                r.name, r.cuisine, r.area, r.km, r.prep, r.costForTwo, r.veg, r.theme);
+            for (Item m : r.items) {
+                int id = insert("INSERT INTO menu_items (restaurant_id, name, description, category, price, is_veg, emoji) VALUES (?,?,?,?,?,?,?)",
+                    r.id, m.name(), m.desc(), m.category(), m.price(), m.veg(), m.emoji());
+                r.idOf.put(m.name(), id); r.byId.put(id, m);
+            }
+        }
     }
 
     private static void insert0(String sql, Object... p) { Db.update(sql, p); }

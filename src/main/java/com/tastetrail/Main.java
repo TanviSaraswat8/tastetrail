@@ -41,7 +41,7 @@ public final class Main {
         TokenService tokens = new TokenService(System.getenv().getOrDefault("JWT_SECRET", "change-this-secret-for-real-deployments"), 7 * 24 * 3600);
         AppContext ctx = new AppContext(tokens);
         Http.Router router = new Http.Router(tokens);
-        List<Controller> controllers = List.of(new AuthController(ctx), new RestaurantController(ctx), new OrderController(ctx), new AdminController(ctx));
+        List<Controller> controllers = List.of(new AuthController(ctx), new RestaurantController(ctx), new OrderController(ctx), new AdminController(ctx), new ExploreController(ctx));
         for (Controller c : controllers) c.register(router); // polymorphism: each controller adds its own routes
         server.createContext("/api/", router);
         server.createContext("/", new Http.StaticFiles(Path.of("web")));

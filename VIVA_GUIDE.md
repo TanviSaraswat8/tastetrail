@@ -49,7 +49,31 @@ Open the link 5 minutes before your turn – the free server sleeps when unused.
 
 Tip: open the **customer in a normal Chrome window** and the **admin in an Incognito window** side by side. Then you can show live tracking.
 
-# 3. Five-minute demo script
+# 3. Research gap and novelty – "how is TasteTrail different from Zomato and Swiggy?"
+
+**What the big apps already have (so we do NOT claim these as new):** group ordering through a shared cart link (both launched it in August 2024), "Healthy Mode" nutrition ratings (Zomato, 2026), bill splitting for dine-in (Zomato's District app), loyalty subscriptions.
+
+**Gaps we found (from news reports and studies):**
+
+| Gap in current apps | Evidence | What TasteTrail does |
+|---|---|---|
+| Hidden and rising charges | The platform fee started at ₹2 in 2023 and reached about ₹15–18 per order in March 2026; users complained a ₹200 burger becomes a ₹350 bill. A Jefferies survey found 80% of restaurants price higher on apps than on their dine-in menu (about 10–11% more on average). | **Fair Price bill:** ₹0 platform fee, every rupee itemised, and a "Where your money goes" bar on the cart. |
+| You can't start from a budget | Apps make you pick dishes first and only show the total at checkout. Nobody answers "feed 4 people for ₹1,000". | **Budget Feast Planner:** enter the number of people and a budget; a dynamic-programming (bounded knapsack) algorithm picks the most satisfying meal where everyone gets a full serving and the final bill, including GST, packaging and delivery, stays within budget. It shows the top 3 restaurants with one-tap "Add all to cart". |
+| Choice overload / "I don't know what I want" | Hundreds of options; discovery is driven by ads and sponsored placements. | **Mood Match:** a 3-tap quiz (mood, spice, budget) gives ranked dishes with the *reasons* shown ("fits your comfort mood", "a cuisine you haven't tried"), plus a **spin-the-wheel** for the truly undecided. |
+| Loyalty rewards spending, not exploring | Gold/One memberships reward frequency and spend. | **Taste Passport:** one stamp per cuisine, XP (+25 for every new cuisine), 5 levels, bronze/silver/gold badges (Night Owl, Spice Lord, Globetrotter…) and a "next challenge" that sends you to a cuisine you have never tried. |
+| Group bills are split equally, which is unfair | Group ordering exists, but the payment is done by the host and the split is left to the group (case studies list "split payment" as a missing piece). | **Fair Bill Split:** tap who ate each dish; each person pays for their own food, and GST/fees/discounts are shared in proportion. Rounding is fixed so the parts add up exactly; "Copy split" for the group chat. |
+
+**One-line pitch:** "Zomato and Swiggy optimise for more orders. TasteTrail optimises for the customer: it starts from your budget and mood, shows every rupee, and makes exploring new food a game."
+
+**Where the code is:** `src/main/java/com/tastetrail/explore/` – `FeastPlanner.java` (DP knapsack), `MoodMatcher.java` (scoring with an enum of moods), `TastePassport.java` (rules as records + predicates), `BillSplitter.java` (overloaded split methods), `Dish.java` (record + tag rules). API: `web/ExploreController.java`. Pages: `explore.html`, `passport.html`, the split panel in `cart.html`. 8 unit tests in `CoreTest` (one checks the DP against brute force).
+
+**Likely questions**
+- *Why dynamic programming and not "pick the cheapest"?* Greedy choices can miss the best combination (e.g. two cheap starters vs one main). The DP tries every quantity combination in O(copies × servings × budget) – about a few million steps, under 0.2 s.
+- *What is the state of the DP?* `best[s][c]` = highest satisfaction with `s` half-servings (capped at 2 × people) and exactly ₹`c` of food. Each extra copy of the same dish is worth 0.7× the previous one, so the plan prefers variety.
+- *How is "satisfaction" measured?* Menu section value (main 10, starter 6, dessert 5…) boosted up to 50% for the restaurant's most-ordered dishes.
+- *Why did adding six brands not change the analytics?* They are inserted after the order history (and marked NEW), so every earlier id, order and figure in the report is identical.
+
+# 4. Five-minute demo script
 
 1. **Sign-in page** – "Customers and admins sign in here. Passwords are stored as salted PBKDF2 hashes." Click **Customer demo**.
 2. **Home page** – type **paneer** in the search box: "Search looks inside menus too – neither restaurant has 'paneer' in its name." Click **Pure veg**, then clear it.
@@ -61,9 +85,13 @@ Tip: open the **customer in a normal Chrome window** and the **admin in an Incog
 8. Admin → **Mark delivered**, customer → give **5 stars**.
 9. Admin → **Menu** – switch a dish **out of stock**; show it now says "Unavailable" for customers. Switch it back.
 10. Admin → **Analytics** – revenue, average order value, peak hour (8–9 pm), top dishes, and the association-rules table.
-11. If they ask about OOP, open `Coupon.java` and `PercentCoupon.java` (see section 1).
+11. **Explore → Mood Match** – choose *Adventurous* + *Bring the heat*: dishes from cuisines you've never ordered come first, with the reasons shown. Press **Spin the wheel**.
+12. **Explore → Feast Planner** – 4 people, ₹1,000 → **Plan my feast**: three complete meals within budget. **Add all to cart**.
+13. **Cart** – show **Platform fee ₹0**, the **Where your money goes** bar, and **Split this bill → By dish** (tap names under each dish).
+14. **Passport** – level, XP bar, cuisine stamps (6 grey ones are the new brands), badges and the next challenge.
+15. If they ask about OOP, open `Coupon.java` and `PercentCoupon.java` (see section 1), or `explore/FeastPlanner.java` for the algorithm.
 
-# 4. Likely viva questions and answers
+# 5. Likely viva questions and answers
 
 **Q1. Which OOP concepts did you use?**
 All four pillars. Encapsulation: private fields with getters, e.g. `Cart` hides its list. Abstraction: abstract classes `User`, `Coupon`, `OnlinePayment`, `BaseDao` and interfaces `PaymentMethod`, `Recommender`, `Controller`. Inheritance: `Customer` and `Admin` extend `User`; `PercentCoupon` and `FlatCoupon` extend `Coupon`. Polymorphism: `coupon.apply()` runs the subclass's `calculateDiscount()`; `user.canManageRestaurants()` answers differently for Customer and Admin.
@@ -140,7 +168,7 @@ No. It is one Java program with an embedded database. The Dockerfile builds it i
 **Q25. What did each team member do?**
 Agree on this as a team before the viva, so everyone can explain their own part (for example: frontend pages, backend and OOP classes, database and analytics, testing and report).
 
-# 5. If something goes wrong
+# 6. If something goes wrong
 
 | Problem | Fix |
 |---|---|

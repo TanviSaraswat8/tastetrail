@@ -32,6 +32,10 @@ bestsellers and reviews · single-restaurant cart · server-calculated bill (cou
 estimate · "Frequently ordered together" suggestions · UPI / card (simulated) or cash on delivery · live order tracking · cancel before
 preparation · ratings · order history.
 
+**Only on TasteTrail:** Budget Feast Planner (dynamic programming: best meal for N people within a total budget) · Mood Match quiz
+and spin-the-wheel · Taste Passport (cuisine stamps, XP levels, bronze/silver/gold badges) · Fair Bill Split by dish · ₹0 platform fee
+with a "where your money goes" bill. 14 restaurant brands, 95 dishes with real photos (credits page).
+
 **Admin:** live order board · price, stock and new-dish management · open/close restaurant · sales analytics (KPIs, revenue trend with
 7-day moving average and linear forecast, orders by hour, top dishes, revenue by restaurant/category, payments, ratings, association rules).
 

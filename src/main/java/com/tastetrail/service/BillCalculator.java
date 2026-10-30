@@ -38,6 +38,11 @@ public class BillCalculator {
         return baseDeliveryFee + extraKm * perKmFee;
     }
 
+    /** Amount payable for a given food value (no coupon) – used by the Feast Planner to stay inside a budget. */
+    public double totalFor(double foodValue, double distanceKm) {
+        return round2(foodValue + round2(foodValue * gstRate) + deliveryFee(distanceKm, foodValue) + packagingFee);
+    }
+
     /** Preparation + 2 min per item above three + travel at 20 km/h + 5 min hand-over. */
     public int estimateEtaMinutes(int prepMinutes, double distanceKm, int itemCount) {
         int extraPrep = Math.max(0, itemCount - 3) * 2;

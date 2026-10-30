@@ -20,7 +20,7 @@ function render() {
       <div class="card pad row" style="gap:20px">
         <div class="emoji-tile t-${R.theme}" style="width:92px;height:92px;font-size:48px">${RESTAURANT_EMOJI[R.name] || '🍽️'}</div>
         <div><h1>${esc(R.name)}</h1><p class="muted">${esc(R.cuisine)}</p>
-          <p class="small" style="margin-top:8px;color:#57534e">⭐ <b>${R.rating}</b> (${R.rating_count} ratings) &nbsp;·&nbsp; 📍 ${esc(R.area)} · ${R.distance_km} km &nbsp;·&nbsp; 🕒 Prep ~${R.prep_minutes} min</p></div>
+          <p class="small" style="margin-top:8px;color:#57534e">${R.rating == null ? '<span class="newtag">NEW ON TASTETRAIL</span>' : `⭐ <b>${R.rating}</b> (${R.rating_count} ratings)`} &nbsp;·&nbsp; 📍 ${esc(R.area)} · ${R.distance_km} km &nbsp;·&nbsp; 🕒 Prep ~${R.prep_minutes} min</p></div>
       </div>
       ${R.is_open ? '' : '<p class="alert alert-warn" style="margin-top:14px">This restaurant is not accepting orders right now.</p>'}
       <label class="row small bold" style="margin-top:20px;gap:8px;width:fit-content;cursor:pointer"><input type="checkbox" id="veg" ${vegOnly ? 'checked' : ''}> Veg only</label>

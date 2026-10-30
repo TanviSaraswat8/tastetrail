@@ -393,6 +393,57 @@ const ORDER_DAYS = 60;
 const TOTAL_ORDERS = 1500;
 
 
+// Brands onboarded recently: menus but no order history yet (inserted after the history, so earlier numbers do not change)
+const NEW_BRANDS = [
+  { name: "Roll Republic", cuisine: "Rolls · Wraps", area: "Sector 63", distance_km: 2.2, prep_minutes: 12, cost_for_two: 350, veg: 0, theme: "orange",
+    items: [
+      ["Chicken Kathi Roll", "Mains", 159, 0, "🌯", 1, "Flaky paratha rolled with chicken tikka and onions"],
+      ["Paneer Tikka Roll", "Mains", 139, 1, "🌯", 1, "Smoky paneer tikka with mint chutney"],
+      ["Egg Roll", "Mains", 99, 0, "🥚", 1, "Kolkata-style egg paratha roll"],
+      ["Mutton Seekh Roll", "Mains", 189, 0, "🌯", 1, "Minced mutton seekh kebab in a roomali wrap"],
+      ["Masala Fries", "Sides", 89, 1, "🍟", 1, "Crispy fries with chaat masala"],
+      ["Nimbu Pani", "Beverages", 49, 1, "🍋", 1, "Fresh lime soda, sweet or salted"]] },
+  { name: "Green Bowl Co.", cuisine: "Healthy · Salads", area: "Sector 44", distance_km: 3.4, prep_minutes: 10, cost_for_two: 500, veg: 1, theme: "emerald",
+    items: [
+      ["Garden Power Salad", "Mains", 279, 1, "🥗", 1, "Crunchy greens, cucumber, chickpeas and lemon-herb dressing"],
+      ["Greek Salad", "Mains", 229, 1, "🥗", 1, "Cucumber, tomato, olives and feta"],
+      ["Falafel Hummus Bowl", "Mains", 259, 1, "🧆", 1, "Falafel with hummus, pickles and pita"],
+      ["Avocado Toast", "Starters", 199, 1, "🥑", 1, "Sourdough with smashed avocado and chilli flakes"],
+      ["Fresh Fruit Bowl", "Desserts", 149, 1, "🍓", 1, "Seasonal cut fruits with honey"],
+      ["Green Detox Smoothie", "Beverages", 169, 1, "🥤", 1, "Spinach, apple, banana and ginger"]] },
+  { name: "Kebab Kingdom", cuisine: "Mughlai · Kebabs", area: "Sector 29", distance_km: 3.9, prep_minutes: 28, cost_for_two: 700, veg: 0, theme: "red",
+    items: [
+      ["Seekh Kebab (4 pcs)", "Starters", 299, 0, "🍢", 1, "Charcoal-grilled minced mutton skewers"],
+      ["Galouti Kebab", "Starters", 329, 0, "🥩", 1, "Melt-in-the-mouth Lucknowi kebab"],
+      ["Tandoori Chicken (Half)", "Mains", 349, 0, "🍗", 1, "Clay-oven roasted chicken with spices"],
+      ["Paneer Tikka", "Starters", 259, 1, "🧀", 1, "Char-grilled cottage cheese with peppers"],
+      ["Rumali Roti", "Breads", 39, 1, "🫓", 1, "Thin handkerchief bread"],
+      ["Phirni", "Desserts", 99, 1, "🍮", 1, "Chilled ground-rice pudding"]] },
+  { name: "Tokyo Tiffin", cuisine: "Japanese · Korean", area: "Sector 18", distance_km: 2.7, prep_minutes: 20, cost_for_two: 800, veg: 0, theme: "rose",
+    items: [
+      ["Veg Sushi Platter", "Mains", 399, 1, "🍣", 1, "Cucumber, avocado and carrot maki rolls"],
+      ["Chicken Ramen", "Mains", 349, 0, "🍜", 1, "Rich broth, noodles, chicken and soft egg"],
+      ["Kimchi Fried Rice", "Mains", 279, 1, "🍚", 1, "Spicy fermented cabbage fried rice"],
+      ["Korean Fried Chicken", "Starters", 329, 0, "🍗", 1, "Double-fried chicken in gochujang glaze"],
+      ["Veg Gyoza (6 pcs)", "Starters", 219, 1, "🥟", 1, "Pan-fried Japanese dumplings"],
+      ["Matcha Latte", "Beverages", 189, 1, "🍵", 1, "Japanese green tea latte"]] },
+  { name: "Taco Tierra", cuisine: "Mexican", area: "Sector 76", distance_km: 4.5, prep_minutes: 15, cost_for_two: 600, veg: 0, theme: "yellow",
+    items: [
+      ["Chicken Tacos (3 pcs)", "Mains", 269, 0, "🌮", 1, "Soft tacos with grilled chicken and salsa"],
+      ["Bean Burrito", "Mains", 239, 1, "🌯", 1, "Rice, beans, cheese and pico de gallo"],
+      ["Loaded Nachos", "Starters", 219, 1, "🧀", 1, "Nachos with cheese sauce, beans and jalapeños"],
+      ["Cheese Quesadilla", "Mains", 229, 1, "🫓", 1, "Grilled tortilla with melted cheese and peppers"],
+      ["Churros", "Desserts", 149, 1, "🍩", 1, "Cinnamon-sugar churros with chocolate dip"],
+      ["Virgin Mojito", "Beverages", 129, 1, "🍹", 1, "Mint, lime and soda"]] },
+  { name: "Thali House", cuisine: "Gujarati · Rajasthani", area: "Sector 50", distance_km: 3.2, prep_minutes: 18, cost_for_two: 450, veg: 1, theme: "lime",
+    items: [
+      ["Gujarati Thali", "Mains", 299, 1, "🍱", 1, "Dal, kadhi, two sabzis, rotli, rice and sweet"],
+      ["Dal Baati Churma", "Mains", 249, 1, "🥘", 1, "Baked wheat balls with dal and sweet churma"],
+      ["Khaman Dhokla", "Starters", 99, 1, "🟨", 1, "Steamed gram-flour cakes with green chutney"],
+      ["Pyaaz Kachori (2 pcs)", "Starters", 79, 1, "🥟", 1, "Flaky onion-stuffed kachori"],
+      ["Khandvi", "Starters", 109, 1, "🌀", 1, "Rolled gram-flour bites with mustard tadka"],
+      ["Aam Panna", "Beverages", 69, 1, "🥭", 1, "Raw mango cooler with cumin"]] }];
+
 function runSeed() {
   const insR = db.prepare('INSERT INTO restaurants (name,cuisine,area,distance_km,prep_minutes,cost_for_two,is_pure_veg,theme) VALUES (?,?,?,?,?,?,?,?)');
   const insI = db.prepare('INSERT INTO menu_items (restaurant_id,name,description,category,price,is_veg,emoji) VALUES (?,?,?,?,?,?,?)');
@@ -487,12 +538,17 @@ function runSeed() {
   // a few live orders today so the admin board has work in it
   const live = ['PLACED', 'PLACED', 'CONFIRMED', 'PREPARING', 'PREPARING', 'OUT_FOR_DELIVERY'];
   live.forEach((st, k) => placeOrder(users[1 + k * 3], RESTAURANTS[k % RESTAURANTS.length], new Date(Date.now() - (40 - k * 6) * 60000), st));
+  // recently onboarded brands go in last, so the ids and history above stay the same
+  for (const r of NEW_BRANDS) {
+    r.id = Number(insR.run(r.name, r.cuisine, r.area, r.distance_km, r.prep_minutes, r.cost_for_two, r.veg, r.theme).lastInsertRowid);
+    for (const [name, category, price, veg, emoji, w, desc] of r.items) insI.run(r.id, name, desc, category, price, veg, emoji);
+  }
 
 }
 
 
 // ===================== in-browser data store =====================
-const DB_KEY = 'tt_demo_db_v2';
+const DB_KEY = 'tt_demo_db_v3';
 const T = { restaurants: [], menu_items: [], coupons: [], users: [], orders: [], order_items: [], reviews: [] };
 let SEQ = {};
 
@@ -667,6 +723,210 @@ route('GET', '/recommendations', (c) => {
   let recs = recommend(m, ids, { k: 3, allowed, minLift: 1.2 }).map((r) => ({ ...r, reason: 'frequently ordered together' }));
   if (recs.length < 3) recs = recs.concat(popular(m, { k: 3 - recs.length, allowed, exclude: [...ids, ...recs.map((r) => r.item)] }).map((p) => ({ item: p.item, reason: 'popular at this restaurant' })));
   return recs.map((r) => ({ ...itemRow(byId('menu_items', r.item)), confidence: r.confidence ?? null, lift: r.lift ?? null, reason: r.reason, because: r.because ? byId('menu_items', r.because).name : null }));
+});
+
+// ===================== TasteTrail-only features (same rules as the Java explore package) =====================
+const has = (t, ws) => ws.some((w) => t.includes(w));
+function dishTags(d) {
+  const n = d.name.toLowerCase(), c = d.cuisine.toLowerCase(), t = new Set();
+  if (has(n, ['chilli', 'peri', '65', 'mirchi', 'kimchi', 'seekh', 'tikka', 'tandoori', 'pani puri', 'korean', 'arrabbiata', 'hot & sour', 'masala dosa', 'mysore', 'kathi', 'kebab', 'tacos'])) t.add('SPICY');
+  if (has(n, ['biryani', 'dal', 'butter', 'makhani', 'chole', 'pav bhaji', 'ramen', 'noodles', 'fried rice', 'pizza', 'thali', 'baati', 'burrito', 'lava', 'brownie', 'hot chocolate', 'chai', 'naan'])) t.add('COMFORT');
+  if (has(n, ['salad', 'idli', 'dhokla', 'khandvi', 'sushi', 'smoothie', 'fruit', 'soup', 'uttapam', 'avocado', 'falafel', 'raita', 'chaas', 'lemon', 'nimbu', 'panna', 'filter coffee', 'matcha'])) t.add('LIGHT');
+  if (d.category === 'Desserts' || has(n, ['shake', 'lassi', 'waffle', 'kesari', 'jamun', 'meetha', 'phirni', 'churros', 'smoothie', 'hot chocolate'])) t.add('SWEET');
+  if (d.category === 'Beverages') t.add('DRINK');
+  if (d.category === 'Mains' && d.price >= 199) t.add('FILLING');
+  if (c.includes('street') || has(n, ['roll', 'samosa', 'chaat', 'momos', 'kachori', 'vada', 'fries', 'burger'])) t.add('STREET');
+  if (has(c, ['italian', 'chinese', 'japanese', 'korean', 'mexican', 'healthy'])) t.add('GLOBAL');
+  if (has(n, ['tikka', 'tandoori', 'seekh', 'kebab', 'grilled'])) t.add('GRILLED');
+  return t;
+}
+const halfServings = (d) => (d.category === 'Mains' ? 2 : d.category === 'Starters' ? 1 : 0);
+const totalFor = (food, km) => round2(food + round2(food * PRICING_RULES.gstRate) + deliveryFee(km, food) + PRICING_RULES.packagingFee);
+
+function allDishes() {
+  const counts = new Map();
+  for (const l of T.order_items) counts.set(l.menu_item_id, (counts.get(l.menu_item_id) || 0) + 1);
+  const out = [];
+  for (const r of T.restaurants.filter((x) => x.is_open).sort((a, b) => a.id - b.id))
+    for (const m of T.menu_items.filter((x) => x.restaurant_id === r.id && x.is_available).sort((a, b) => a.id - b.id))
+      out.push({ id: m.id, name: m.name, category: m.category, price: m.price, veg: !!m.is_veg, emoji: m.emoji, restaurantId: r.id, restaurant: r.name,
+        cuisine: r.cuisine, distanceKm: r.distance_km, prepMinutes: r.prep_minutes, orders: counts.get(m.id) || 0 });
+  return out;
+}
+const dishJson = (d) => ({ id: d.id, name: d.name, category: d.category, price: d.price, is_veg: d.veg, emoji: d.emoji, restaurant_id: d.restaurantId, restaurant: d.restaurant, cuisine: d.cuisine });
+
+// ---- Budget Feast Planner: bounded knapsack by dynamic programming (see FeastPlanner.java) ----
+const BASE_VALUE = { Mains: 10, Starters: 6, Desserts: 5, Beverages: 4, Sides: 3, Breads: 2.5 };
+function planOne(menu, people, budget, vegOnly) {
+  const dishes = menu.filter((d) => !vegOnly || d.veg);
+  if (!dishes.length) return null;
+  const km = dishes[0].distanceKm, maxOrders = Math.max(...dishes.map((d) => d.orders));
+  let C = Math.floor(budget / 1.05);
+  while (C > 0 && totalFor(C, km) > budget) C--;
+  if (C <= 0) return null;
+  const cd = [], cv = [];
+  for (const d of dishes) {
+    const maxCopies = halfServings(d) > 0 ? people : Math.min(people, 3);
+    let v = (BASE_VALUE[d.category] ?? 3) * (1 + 0.5 * (maxOrders === 0 ? 0 : d.orders / maxOrders));
+    for (let k = 0; k < maxCopies && d.price * (k + 1) <= C; k++) { cd.push(d); cv.push(v); v *= 0.7; }
+  }
+  const target = 2 * people, n = cd.length, W = C + 1;
+  const best = []; for (let s = 0; s <= target; s++) best.push(new Float64Array(W).fill(-Infinity));
+  best[0][0] = 0;
+  const from = [];
+  for (let i = 0; i < n; i++) {
+    const cost = Math.round(cd[i].price), hs = halfServings(cd[i]), val = cv[i];
+    const f = new Int8Array((target + 1) * W).fill(-1); from.push(f);
+    for (let s = target; s >= 0; s--) {
+      const lo = s === target ? Math.max(0, target - hs) : s - hs, hi = s === target ? target : s - hs;
+      if (hi < 0) continue;
+      const row = best[s];
+      for (let c = C; c >= cost; c--)
+        for (let ps = lo; ps <= hi; ps++) {
+          const cand = best[ps][c - cost];
+          if (cand === -Infinity) continue;
+          if (cand + val > row[c] + 1e-9) { row[c] = cand + val; f[s * W + c] = ps; }
+        }
+    }
+  }
+  let bc = -1;
+  for (let c = 0; c <= C; c++) if (best[target][c] > -Infinity && (bc < 0 || best[target][c] > best[target][bc] + 1e-9)) bc = c;
+  if (bc < 0) return null;
+  const qty = new Map(); let s = target, c = bc;
+  for (let i = n - 1; i >= 0; i--) { const ps = from[i][s * W + c]; if (ps < 0) continue; qty.set(cd[i], (qty.get(cd[i]) || 0) + 1); s = ps; c -= Math.round(cd[i].price); }
+  const lines = [...qty.entries()].map(([d, q]) => ({ d, q })).sort((a, b) => halfServings(b.d) - halfServings(a.d) || b.d.price - a.d.price);
+  const food = round2(lines.reduce((t, l) => t + l.d.price * l.q, 0)), total = totalFor(food, km);
+  return { restaurant_id: dishes[0].restaurantId, restaurant: dishes[0].restaurant, items: lines.map((l) => ({ ...dishJson(l.d), quantity: l.q })),
+    food, total, spare: round2(budget - total), servings: lines.reduce((t, l) => t + halfServings(l.d) * l.q, 0) / 2, value: Math.round(best[target][bc] * 10) / 10 };
+}
+route('GET', '/explore/plan', (c) => {
+  const people = parseInt(c.q.people || '2', 10), budget = Number(c.q.budget || 600), veg = c.q.veg === '1';
+  if (!(people >= 1 && people <= 12)) throw bad('Choose between 1 and 12 people');
+  if (!(budget >= 100 && budget <= 20000)) throw bad('Budget must be between ₹100 and ₹20,000');
+  const menus = new Map();
+  for (const d of allDishes()) { if (!menus.has(d.restaurantId)) menus.set(d.restaurantId, []); menus.get(d.restaurantId).push(d); }
+  const plans = [...menus.values()].map((m) => planOne(m, people, budget, veg)).filter(Boolean).sort((a, b) => b.value - a.value).slice(0, 3);
+  return { people, budget, plans };
+});
+
+// ---- Mood Match (see MoodMatcher.java) ----
+const MOODS = {
+  COMFORT: { label: 'Comfort food', emoji: '🛋️', w: { COMFORT: 5, FILLING: 2, SWEET: 1 } },
+  HEALTHY: { label: 'Light & fresh', emoji: '🥗', w: { LIGHT: 6, GRILLED: 2, FILLING: -1 } },
+  ADVENTUROUS: { label: 'Adventurous', emoji: '🧭', w: { GLOBAL: 4, STREET: 1.5, SPICY: 1 } },
+  CELEBRATE: { label: 'Celebration', emoji: '🎉', w: { FILLING: 3, SWEET: 3, GRILLED: 2 } },
+  QUICK: { label: 'Quick bite', emoji: '⚡', w: { STREET: 4, LIGHT: 1, FILLING: -2 } },
+};
+const triedCuisines = (u) => new Set(u ? T.orders.filter((o) => o.user_id === u.id && o.status !== 'CANCELLED').map((o) => byId('restaurants', o.restaurant_id).cuisine) : []);
+route('GET', '/explore/mood', (c) => {
+  const key = String(c.q.mood || 'comfort').toUpperCase(), mood = MOODS[key] || MOODS.COMFORT;
+  const spice = Math.max(0, Math.min(2, parseInt(c.q.spice || '1', 10))), maxPrice = Number(c.q.budget || 400), veg = c.q.veg === '1';
+  const tried = triedCuisines(c.user), dishes = allDishes();
+  const maxOrders = Math.max(1, ...dishes.map((d) => d.orders));
+  const all = [];
+  for (const d of dishes) {
+    if (veg && !d.veg) continue;
+    if (d.price > maxPrice || d.category === 'Sides' || d.category === 'Breads') continue;
+    const tags = dishTags(d), why = []; let score = 0;
+    for (const [t, w] of Object.entries(mood.w)) if (tags.has(t)) score += w;
+    if (score > 0) why.push(`${mood.emoji} fits your ${mood.label.toLowerCase()} mood`);
+    if (tags.has('SPICY')) { if (spice === 2) { score += 3; why.push('🌶️ nice and spicy'); } else if (spice === 0) score -= 4; }
+    else if (spice === 0) { score += 1; why.push('😌 mild'); }
+    const minutes = estimateEtaMinutes(d.prepMinutes, d.distanceKm, 1);
+    if (mood === MOODS.QUICK && minutes <= 30) { score += 3; why.push(`⚡ arrives in ~${minutes} min`); }
+    const isNew = tried.size > 0 && !tried.has(d.cuisine);
+    if (isNew && mood === MOODS.ADVENTUROUS) { score += 4; why.push("🆕 a cuisine you haven't tried yet"); } else if (isNew) score += 0.5;
+    const pop = d.orders / maxOrders;
+    score += 2 * pop; if (pop > 0.5) why.push('🔥 crowd favourite');
+    if (d.price <= maxPrice * 0.6) { score += 0.5; why.push('💰 well within budget'); }
+    if (score > 0) all.push({ d, score: Math.round(score * 10) / 10, why, minutes });
+  }
+  all.sort((a, b) => b.score - a.score || a.d.price - b.d.price);
+  const per = new Map(), matches = [];
+  for (const m of all) {
+    per.set(m.d.restaurantId, (per.get(m.d.restaurantId) || 0) + 1);
+    if (per.get(m.d.restaurantId) > 2) continue;
+    matches.push({ ...dishJson(m.d), score: m.score, reasons: m.why, eta_minutes: m.minutes });
+    if (matches.length === 8) break;
+  }
+  return { mood: mood.label, emoji: mood.emoji, matches };
+});
+
+// ---- Taste Passport (see TastePassport.java) ----
+const LEVELS = ['Taste Rookie', 'Food Explorer', 'Flavour Hunter', 'Cuisine Connoisseur', 'TasteTrail Legend'], LEVEL_XP = [0, 150, 600, 1800, 4000];
+const TIERS = ['', 'Bronze', 'Silver', 'Gold'];
+function badge(id, emoji, name, description, tiers, count) {
+  let tier = 0; while (tier < tiers.length && count >= tiers[tier]) tier++;
+  const target = tiers[Math.min(tier, tiers.length - 1)];
+  return { id, emoji, name, description, progress: Math.min(count, target), target, earned: tier > 0, tier, tierName: TIERS[tier] };
+}
+const istParts = (iso) => { const d = new Date(new Date(iso).getTime() + 330 * 60000); return { hour: d.getUTCHours(), dow: d.getUTCDay() }; };
+route('GET', '/me/passport', (c) => {
+  const u = needUser(c);
+  const dishById = new Map(allDishes().map((d) => [d.id, d]));
+  const places = [...T.restaurants].sort((a, b) => b.id - a.id).map((r) => ({ id: r.id, name: r.name, cuisine: r.cuisine }));
+  const cuisineOf = new Map(places.map((p) => [p.id, p.cuisine]));
+  const orders = T.orders.filter((o) => o.user_id === u.id && o.status === 'DELIVERED').sort((a, b) => cmp(a.created_at, b.created_at)).map((o) => ({
+    restaurantId: o.restaurant_id, ...istParts(o.created_at), rated: T.reviews.some((v) => v.order_id === o.id),
+    items: T.order_items.filter((l) => l.order_id === o.id).map((l) => dishById.get(l.menu_item_id)).filter(Boolean) }));
+  let xp = 0; const per = new Map(), seen = new Set();
+  for (const o of orders) {
+    xp += 10 + (o.rated ? 5 : 0);
+    const cu = cuisineOf.get(o.restaurantId) || '?'; if (!seen.has(cu)) { seen.add(cu); xp += 25; }
+    per.set(o.restaurantId, (per.get(o.restaurantId) || 0) + 1);
+  }
+  const stamps = places.map((p) => ({ restaurantId: p.id, restaurant: p.name, cuisine: p.cuisine, collected: per.has(p.id), orders: per.get(p.id) || 0 }));
+  const collected = stamps.filter((s) => s.collected).length;
+  const anyTag = (o, t) => o.items.some((d) => dishTags(d).has(t));
+  const count = (f) => orders.filter(f).length;
+  const badges = [
+    badge('night-owl', '🦉', 'Night Owl', 'Orders after 10 pm', [3, 15, 40], count((o) => o.hour >= 22 || o.hour < 4)),
+    badge('early-bird', '🌅', 'Early Bird', 'Orders before 11 am', [3, 10, 25], count((o) => o.hour >= 6 && o.hour < 11)),
+    badge('spice-lord', '🌶️', 'Spice Lord', 'Orders with a spicy dish', [5, 25, 100], count((o) => anyTag(o, 'SPICY'))),
+    badge('sweet-tooth', '🍰', 'Sweet Tooth', 'Orders with a dessert', [5, 20, 60], count((o) => o.items.some((d) => d.category === 'Desserts'))),
+    badge('weekend', '🎉', 'Weekend Feaster', 'Orders on Saturday or Sunday', [5, 25, 80], count((o) => o.dow === 0 || o.dow === 6)),
+    badge('critic', '✍️', 'Food Critic', 'Orders you rated', [5, 25, 150], count((o) => o.rated)),
+    badge('healthy', '🥗', 'Green Streak', 'Orders with something light', [3, 15, 50], count((o) => anyTag(o, 'LIGHT'))),
+    badge('globetrotter', '🌍', 'Globetrotter', 'Cuisine stamps collected', [3, 8, places.length], collected),
+    badge('regular', '🏠', 'Loyal Regular', 'Orders from your favourite restaurant', [5, 20, 50], Math.max(0, ...per.values())),
+  ];
+  let k = 0; LEVEL_XP.forEach((x, i) => { if (xp >= x) k = i; });
+  const challenge = places.find((p) => !per.has(p.id)) || null;
+  return { xp, level: { number: k + 1, name: LEVELS[k], fromXp: LEVEL_XP[k], nextXp: k + 1 < LEVEL_XP.length ? LEVEL_XP[k + 1] : null }, ordersCount: orders.length,
+    stamps, stampsCollected: collected, badges, challenge,
+    challengeText: challenge ? `Order from ${challenge.name} to collect the ${challenge.cuisine} stamp and earn +35 XP` : "You've collected every stamp – legend status!" };
+});
+
+// ---- Fair Bill Split (see BillSplitter.java) ----
+route('POST', '/cart/split', (c) => {
+  const { r, lines } = loadCart(c.body);
+  const bill = quote(r, lines, findCoupon(c.body.coupon));
+  const people = (Array.isArray(c.body.people) ? c.body.people : []).map((p) => String(p ?? '').trim()).filter(Boolean);
+  if (people.length < 2 || people.length > 10) throw bad('Split between 2 and 10 people');
+  const n = people.length, shares = [];
+  let sum = 0;
+  if (c.body.mode === 'items' && c.body.assign && typeof c.body.assign === 'object') {
+    const food = new Array(n).fill(0), items = people.map(() => []);
+    for (const l of lines) {
+      let who = [...new Set((c.body.assign[l.id] || []).map(Number).filter((p) => p >= 0 && p < n))];
+      if (!who.length) who = people.map((_, i) => i);
+      const part = (l.price * l.quantity) / who.length;
+      for (const p of who) { food[p] += part; items[p].push(who.length === 1 ? `${l.quantity} × ${l.name}` : `${l.name} (shared ÷${who.length})`); }
+    }
+    const extras = bill.total - bill.subtotal;
+    for (let i = 0; i < n; i++) {
+      const ratio = bill.subtotal === 0 ? 1 / n : food[i] / bill.subtotal;
+      const pay = i === n - 1 ? round2(bill.total - sum) : round2(food[i] + extras * ratio);
+      sum += pay; shares.push({ person: people[i], food: round2(food[i]), extras: round2(pay - food[i]), pay, items: items[i] });
+    }
+  } else {
+    const each = round2(bill.total / n);
+    for (let i = 0; i < n; i++) {
+      const pay = i === n - 1 ? round2(bill.total - sum) : each; sum += pay;
+      shares.push({ person: people[i], food: round2(bill.subtotal / n), extras: round2(pay - bill.subtotal / n), pay, items: ['Equal share'] });
+    }
+  }
+  return { total: bill.total, shares };
 });
 
 route('POST', '/orders', (c) => {
