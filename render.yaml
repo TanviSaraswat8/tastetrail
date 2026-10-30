@@ -1,0 +1,10 @@
+# One-click deployment on Render (https://render.com) – "New > Blueprint" and pick this repository
+services:
+  - type: web
+    name: tastetrail
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
