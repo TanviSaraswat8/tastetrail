@@ -290,3 +290,8 @@ input[type=range] { width: 100%; accent-color: var(--brand); }
 }
 .side > * { min-width: 0; }
 .grid > * { min-width: 0; }
+.nav a, .appbtn, .me { white-space: nowrap; }
+@media (max-width: 1120px) and (min-width: 861px) {
+  .nav a { padding: 8px 8px; font-size: 13.5px; }
+  .appbtn .desk-inline { display: none; }
+}
