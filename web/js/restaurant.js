@@ -18,7 +18,7 @@ function render() {
   <div class="side">
     <div>
       <div class="card pad row" style="gap:20px">
-        <div class="emoji-tile t-${R.theme}" style="width:92px;height:92px;font-size:48px">${RESTAURANT_EMOJI[R.name] || '🍽️'}</div>
+        <div class="emoji-tile t-${R.theme} has-cover" style="width:92px;height:92px;font-size:48px">${RESTAURANT_EMOJI[R.name] || '🍽️'}${coverImg(R.name, 320)}</div>
         <div><h1>${esc(R.name)}</h1><p class="muted">${esc(R.cuisine)}</p>
           <p class="small" style="margin-top:8px;color:#57534e">${R.rating == null ? '<span class="newtag">NEW ON TASTETRAIL</span>' : `⭐ <b>${R.rating}</b> (${R.rating_count} ratings)`} &nbsp;·&nbsp; 📍 ${esc(R.area)} · ${R.distance_km} km &nbsp;·&nbsp; 🕒 Prep ~${R.prep_minutes} min</p></div>
       </div>

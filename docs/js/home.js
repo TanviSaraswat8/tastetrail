@@ -42,7 +42,7 @@ async function loadRestaurants() {
   $('#count').textContent = `${list.length} places delivering to you`;
   $('#list').innerHTML = list.length ? list.map((r) => `
     <a class="rest-card ${r.is_open ? '' : 'off'}" href="restaurant.html?id=${r.id}">
-      <div class="tile t-${r.theme}">${RESTAURANT_EMOJI[r.name] || '🍽️'}
+      <div class="tile t-${r.theme}">${RESTAURANT_EMOJI[r.name] || '🍽️'}${coverImg(r.name, 640)}${restaurantCoverUrl(r.name) ? `<span class="brand">${RESTAURANT_EMOJI[r.name] || '🍽️'}</span>` : ''}
         ${r.is_pure_veg ? '<span class="tag">PURE VEG</span>' : ''}${r.is_open ? '' : '<span class="closed">Closed now</span>'}</div>
       <div class="row between" style="margin-top:10px"><h3 class="truncate">${esc(r.name)}</h3>${r.rating == null ? '<span class="newtag">NEW</span>' : `<span class="rating">${r.rating} ★</span>`}</div>
       <p class="small muted truncate">${esc(r.cuisine)}</p>

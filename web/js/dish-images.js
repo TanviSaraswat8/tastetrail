@@ -112,3 +112,17 @@ window.dishPic = (item, size, extraClass) => {
   return `<span class="emoji-tile dish-photo ${extraClass || ''}" style="${box}" data-emoji="${em}">` +
     `<img src="${url}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('dish-photo');this.parentNode.textContent=this.parentNode.dataset.emoji"></span>`;
 };
+
+/* Restaurant cover pictures: each brand shows a photo of its signature dish. */
+window.RESTAURANT_COVER = {
+  'Biryani Bazaar': 'Chicken Dum Biryani', 'Pizza Planet': 'Margherita Pizza', 'Punjabi Tadka': 'Butter Chicken', 'Dosa Junction': 'Masala Dosa',
+  'Wok This Way': 'Veg Hakka Noodles', 'Burger Barn': 'Classic Veg Burger', 'Chaat Corner': 'Pani Puri (8 pcs)', 'Sweet Tooth': 'Belgian Waffle',
+  'Roll Republic': 'Chicken Kathi Roll', 'Green Bowl Co.': 'Greek Salad', 'Kebab Kingdom': 'Seekh Kebab (4 pcs)', 'Tokyo Tiffin': 'Veg Sushi Platter',
+  'Taco Tierra': 'Chicken Tacos (3 pcs)', 'Thali House': 'Gujarati Thali',
+};
+window.restaurantCoverUrl = (name, w) => window.RESTAURANT_COVER[name] ? window.dishImageUrl(window.RESTAURANT_COVER[name], w || 640) : null;
+/* Image layer placed over an emoji tile; if it fails to load it removes itself and the emoji shows. */
+window.coverImg = (name, w) => {
+  const u = window.restaurantCoverUrl(name, w);
+  return u ? `<img class="cover" src="${u}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+};

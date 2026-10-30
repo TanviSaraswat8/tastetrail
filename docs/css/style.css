@@ -295,3 +295,11 @@ input[type=range] { width: 100%; accent-color: var(--brand); }
   .nav a { padding: 8px 8px; font-size: 13.5px; }
   .appbtn .desk-inline { display: none; }
 }
+/* restaurant cover photos */
+.rest-card .tile { overflow: hidden; }
+.rest-card .tile .cover, .has-cover .cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; transition: transform .3s ease; }
+.has-cover { position: relative; overflow: hidden; }
+.rest-card:hover .tile .cover { transform: scale(1.06); }
+.rest-card .tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.35)); pointer-events: none; }
+.rest-card .tag, .rest-card .closed, .rest-card .brand { z-index: 2; }
+.rest-card .brand { position: absolute; right: 10px; bottom: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.95); display: grid; place-items: center; font-size: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.2); }

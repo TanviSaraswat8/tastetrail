@@ -133,7 +133,7 @@ $('#plan-go').onclick = async () => {
       : r.plans.map((p, i) => `
       <div class="plan ${i === 0 ? 'best' : ''}" style="animation-delay:${i * 80}ms">
         <div class="row between"><div><div class="xs muted">${i === 0 ? '🏆 Best value' : `Option ${i + 1}`}</div><h3>${esc(p.restaurant)}</h3></div>
-          <span class="emoji-tile" style="width:44px;height:44px;font-size:24px">${RESTAURANT_EMOJI[p.restaurant] || '🍽️'}</span></div>
+          <span class="emoji-tile has-cover" style="width:44px;height:44px;font-size:24px">${RESTAURANT_EMOJI[p.restaurant] || '🍽️'}${coverImg(p.restaurant, 160)}</span></div>
         <div class="stack" style="gap:6px">${p.items.map((d) => `<div class="pl">${dishPic(d, 38)}<span style="flex:1"><b>${d.quantity} ×</b> ${esc(d.name)}</span><span class="small muted">${inr(d.price * d.quantity)}</span></div>`).join('')}</div>
         <div class="small" style="border-top:1px solid var(--line);padding-top:8px">
           <div class="row between"><span class="muted">Food</span><span>${inr(p.food)}</span></div>

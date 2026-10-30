@@ -7,7 +7,7 @@ if (Auth.require('customer')) {
       <div class="row between"><h1>My orders</h1><p class="small muted">${list.length} orders · ${inr(Math.round(spent))} spent</p></div>
       <div class="stack" style="margin-top:18px">${list.map((o) => `
         <a class="card order-row row" href="track.html?id=${o.id}" style="padding:14px;gap:16px;margin-top:12px">
-          <span class="emoji-tile t-${o.theme}" style="width:56px;height:56px;font-size:26px">${RESTAURANT_EMOJI[o.restaurant] || '🍽️'}</span>
+          <span class="emoji-tile t-${o.theme} has-cover" style="width:56px;height:56px;font-size:26px">${RESTAURANT_EMOJI[o.restaurant] || '🍽️'}${coverImg(o.restaurant, 160)}</span>
           <div style="flex:1;min-width:0">
             <div class="row" style="gap:8px"><b>${esc(o.restaurant)}</b>${statusBadge(o.status)}</div>
             <p class="small truncate" style="color:#57534e">${esc(o.summary)}</p>
