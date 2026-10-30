@@ -63,7 +63,7 @@ async function refresh() {
       <button class="linkbtn" id="clear">Clear cart</button></div>
     <div style="margin-top:10px">${c.items.map((i) => `
       <div class="row" style="padding:12px 0;border-top:1px solid #f5f5f4">
-        <span style="font-size:24px">${i.emoji}</span>
+        ${dishPic(i, 52)}
         <div style="flex:1"><div class="row" style="gap:8px">${vegMark(i.is_veg)}<b style="font-weight:600">${esc(i.name)}</b></div><span class="small muted">${inr(i.price)} each</span></div>
         ${qtyButton(i.id)}<span class="bold right" style="width:80px">${inr(i.price * i.quantity)}</span>
       </div>`).join('')}</div>`;
@@ -97,7 +97,7 @@ async function refresh() {
     <h3>✨ Frequently ordered together</h3><p class="small muted">Suggested from past orders at this restaurant</p>
     <div class="grid g3" style="margin-top:14px;gap:12px">${recs.map((x) => `
       <div style="border:1px solid var(--line);border-radius:12px;padding:12px">
-        <div class="row" style="gap:8px"><span style="font-size:24px">${x.emoji}</span>${vegMark(x.is_veg)}</div>
+        <div class="row" style="gap:8px">${dishPic(x, 44)}${vegMark(x.is_veg)}</div>
         <div class="small bold" style="margin-top:4px">${esc(x.name)}</div>
         <div class="xs muted">${x.confidence ? `${Math.round(x.confidence * 100)}% of ${esc(x.because)} orders include it` : esc(x.reason)}</div>
         <div class="row between" style="margin-top:8px"><span class="small bold">${inr(x.price)}</span>${qtyButton(x.id)}</div>

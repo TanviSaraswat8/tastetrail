@@ -60,7 +60,7 @@ api('/coupons').then((cs) => ($('#coupons').innerHTML = cs.map((c) => `
   <div class="coupon"><span style="font-size:22px">🎟️</span><div><b>${c.code}</b><div class="xs" style="color:#57534e">${esc(c.description)}</div></div></div>`).join('')));
 api('/popular-dishes').then((ds) => ($('#dishes').innerHTML = ds.map((d) => `
   <a class="card dish" href="restaurant.html?id=${d.restaurant_id}">
-    <span class="emoji-tile" style="width:48px;height:48px;font-size:24px">${d.emoji}</span>
+    ${dishPic(d, 56)}
     <div style="min-width:0"><div class="row" style="gap:6px">${vegMark(d.is_veg)}<b class="small truncate">${esc(d.name)}</b></div>
       <div class="xs muted truncate">${esc(d.restaurant)} · ${inr(d.price)}</div></div>
   </a>`).join('')));

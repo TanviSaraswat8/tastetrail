@@ -10,7 +10,7 @@ async function load() {
   $('#open').style.cssText = rest.is_open ? 'background:#dcfce7;color:#166534' : 'background:#e7e5e4;color:#57534e';
   $('#rows').innerHTML = data.items.map((m) => `
     <tr class="${m.is_available ? '' : 'off'}">
-      <td><div class="row" style="gap:8px"><span style="font-size:20px">${m.emoji}</span>${vegMark(m.is_veg)}<span style="font-weight:600">${esc(m.name)}</span></div></td>
+      <td><div class="row" style="gap:8px">${dishPic(m, 40)}${vegMark(m.is_veg)}<span style="font-weight:600">${esc(m.name)}</span></div></td>
       <td>${m.category}</td><td class="right num">${m.sold}</td>
       <td><input class="input" type="number" min="1" value="${m.price}" data-price="${m.id}" style="width:96px;padding:6px 10px"></td>
       <td><button class="switch ${m.is_available ? 'on' : ''}" data-stock="${m.id}" aria-label="Toggle stock"></button></td>

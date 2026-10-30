@@ -35,7 +35,7 @@ function render() {
               <p class="small muted" style="margin-top:3px">${esc(it.description)}</p>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-              <span class="emoji-tile" style="width:64px;height:64px;font-size:30px">${it.emoji}</span>
+              ${dishPic(it, 108)}
               ${qtyButton(it.id, !it.is_available || !R.is_open)}
             </div>
           </div>`).join('')}</div>`).join('')}
