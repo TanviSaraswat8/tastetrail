@@ -39,7 +39,7 @@ Backend packages (open these in the viva if asked "show me OOP"):
 
 **Before the viva:** run `seed.bat` / `./seed.sh` (server stopped) to reset to clean demo data, then start again.
 
-**Online (optional, gives a public link):** follow `DEPLOY.md` (GitHub + Render, about 10 minutes, free).
+**Online (no laptop setup needed):** the app is live at **https://tanvisaraswat8.github.io/tastetrail/** – it opens on any laptop or phone (scan the QR poster). That online version runs the same logic in the browser; the Java server is what you run locally to show the backend.
 Open the link 5 minutes before your turn – the free server sleeps when unused.
 
 | Login | Email | Password |
