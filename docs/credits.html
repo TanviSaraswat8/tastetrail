@@ -12,7 +12,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="icons/favicon-32.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
   <header class="header" id="header"></header>
@@ -21,9 +21,9 @@
     <p class="small muted" style="margin:6px 0 16px">Dish photos come from Wikimedia Commons and are used under their free licences (Creative Commons, CC0 or public domain). Click a photo to open its source page.</p>
     <div class="card scroll-x"><table class="tbl" id="credits"></table></div>
   </main>
-  <script src="js/mock-api.js"></script>
-  <script src="js/dish-images.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/mock-api.js?v=6"></script>
+  <script src="js/dish-images.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
   <script>
     const rows = Object.entries(DISH_IMAGES).map(([slug, [file, author, lic]]) => {
       const name = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
